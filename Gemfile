@@ -1,13 +1,11 @@
 source 'https://rubygems.org'
 
-# Ruby 2.2.2 is the minimum requirement
-ruby [Gem::Version.new('2.2.2'), Gem::Version.new(RUBY_VERSION)].max
+ruby '>=2.3.0'
 
 # Ensure github repositories are fetched using HTTPS
 git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
   "https://github.com/#{repo_name}.git"
-end if Gem::Version.new(Bundler::VERSION) < Gem::Version.new('2')
+end
 
 # Load vendored dotenv gem and .env file
 require File.join(File.dirname(__FILE__), 'lib/gemfile_helper.rb')
@@ -111,7 +109,7 @@ gem 'httmultiparty', '~> 0.3.16'
 gem 'jquery-rails', '~> 4.2.1'
 gem 'huginn_agent', '~> 0.4.0'
 gem 'json', '~> 1.8.1'
-gem 'jsonpath', '~> 0.9.4'
+gem 'jsonpath', '~> 1.0.1'
 gem 'kaminari', '~> 1.1.1'
 gem 'kramdown', '~> 1.3.3'
 gem 'liquid', '~> 4.0'
@@ -142,7 +140,7 @@ group :development do
   gem 'letter_opener_web', '~> 1.3.1'
   gem 'web-console', '>= 3.3.0'
 
-  gem 'capistrano', '~> 3.4.0'
+  gem 'capistrano', '~> 3.11.0'
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-bundler', '~> 1.1.4'
 
@@ -156,8 +154,7 @@ group :development do
     gem 'coveralls', '~> 0.8.12', require: false
     gem 'capybara', '~> 2.18'
     gem 'capybara-screenshot'
-    gem 'capybara-select2', require: false
-    gem 'delorean'
+    gem 'capybara-select-2', github: 'Hirurg103/capybara_select2', ref: 'fbf22fb74dec10fa0edcd26da7c5184ba8fa2c76', require: false
     gem 'poltergeist'
     gem 'pry-rails'
     gem 'pry-byebug'
@@ -169,7 +166,7 @@ group :development do
     gem 'rails-controller-testing'
     gem 'shoulda-matchers'
     gem 'vcr'
-    gem 'webmock', '~> 2.3'
+    gem 'webmock', '~> 3.5.1'
   end
 end
 
