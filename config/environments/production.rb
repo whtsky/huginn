@@ -55,7 +55,7 @@ Huginn::Application.configure do
   config.force_ssl = ENV['FORCE_SSL'] == 'true'
 
   # See everything in the log (default is will be :debug in Rails 5.0)
-  config.log_level = :info
+  config.log_level = :warn
 
   # Prepend all log lines with the following tags
   config.log_tags = [ :request_id ] # :subdomain
