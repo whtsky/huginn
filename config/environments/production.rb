@@ -63,8 +63,9 @@ Huginn::Application.configure do
   # Use a different logger for distributed setups
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
-  # Use a different cache store in production
-  config.cache_store = :memory_store
+  config.cache_store = :mem_cache_store, ENV["MEMCACHIER_SERVERS"],
+                        {:username => ENV["MEMCACHIER_USERNAME"],
+                        :password => ENV["MEMCACHIER_PASSWORD"]}
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
   if ENV['ASSET_HOST'].present?
