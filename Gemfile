@@ -173,6 +173,8 @@ end
 
 group :production do
   gem 'unicorn', '~> 5.1.0'
+  gem 'memcachier'
+  gem 'dalli'
 end
 
 # Platform requirements.
