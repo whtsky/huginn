@@ -4,6 +4,11 @@ worker_processes Integer(ENV["WEB_CONCURRENCY"] || 2)
 timeout 15
 preload_app true
 
+# for serving https only application
+HttpRequest::DEFAULTS["rack.url_scheme"] = "https"
+HttpRequest::DEFAULTS["HTTPS"] = "on"
+HttpRequest::DEFAULTS["HTTP_X_FORWARDED_PROTO"] = "https"
+
 # Note that this will only work correctly when running Heroku with ONE web worker.
 # If you want to run more than one, use the standard Huginn Procfile instead, with separate web and job entries.
 # You'll need to set the Heroku config variable PROCFILE_PATH to 'Procfile'.
