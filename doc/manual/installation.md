@@ -81,7 +81,7 @@ Download Ruby and compile it:
 Install the bundler and foreman gems:
 
     sudo gem install rake foreman --no-document
-    sudo gem install bundler:"~> 1"  --no-document
+    sudo gem install bundler -v '< 2' --no-document
 
 Update rubygems:
 
@@ -264,6 +264,8 @@ Enable (remove the comment) [from these lines](https://github.com/huginn/huginn/
 
     # web: bundle exec unicorn -c config/unicorn.rb
     # jobs: bundle exec rails runner bin/threaded.rb
+
+**Note:** Ensure you have no leading spaces before `web:` or `jobs:` in your `Procfile` file.
 
 Export the init scripts:
 
