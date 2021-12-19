@@ -29,7 +29,7 @@ end
 
 # Optional libraries.  To conserve RAM, comment out any that you don't need,
 # then run `bundle` and commit the updated Gemfile and Gemfile.lock.
-gem 'twilio-ruby', '~> 3.11.5'    # TwilioAgent
+gem 'twilio-ruby', '~> 5.48.0'    # TwilioAgent
 gem 'ruby-growl', '~> 4.1.0'      # GrowlAgent
 gem 'net-ftp-list', '~> 3.2.8'    # FtpsiteAgent
 gem 'forecast_io', '~> 2.0.0'     # WeatherAgent
@@ -118,7 +118,7 @@ gem 'mini_magick', ">= 4.9.4"
 gem 'multi_xml'
 gem "nokogiri", ">= 1.10.8"
 gem 'omniauth', '~> 1.6.1'
-gem 'rails', '~> 6.0.3.1'
+gem 'rails', '~> 6.0.4'
 gem 'sprockets', '~> 3.7.2'
 gem 'rails-html-sanitizer', '~> 1.2'
 gem 'rufus-scheduler', '~> 3.4.2', require: false

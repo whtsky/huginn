@@ -15,10 +15,38 @@ module Agents
       You must also specify a `message` parameter, you can use [Liquid](https://github.com/huginn/huginn/wiki/Formatting-Events-using-Liquid) to format the message.
 
       Set `expected_update_period_in_days` to the maximum amount of time that you'd expect to pass between Events being created by this Agent.
+
+      If `output_mode` is set to `merge`, the emitted Event will be merged into the original contents of the received Event.
+    MD
+
+    event_description <<-MD
+      Events look like this:
+        {
+          "success": true,
+          "published_tweet": "...",
+          "tweet_id": ...,
+          "tweet_id_str": "...",
+          "agent_id": ...,
+          "event_id": ...
+        }
+
+        {
+          "success": false,
+          "error": "...",
+          "failed_tweet": "...",
+          "agent_id": ...,
+          "event_id": ...
+        }
+
+      Original event contents will be merged when `output_mode` is set to `merge`.
     MD
 
     def validate_options
       errors.add(:base, "expected_update_period_in_days is required") unless options['expected_update_period_in_days'].present?
+
+      if options['output_mode'].present? && !options['output_mode'].to_s.include?('{') && !%[clean merge].include?(options['output_mode'].to_s)
+        errors.add(:base, "if provided, output_mode must be 'clean' or 'merge'")
+      end
     end
 
     def working?
@@ -28,7 +56,8 @@ module Agents
     def default_options
       {
         'expected_update_period_in_days' => "10",
-        'message' => "{{text}}"
+        'message' => "{{text}}",
+        'output_mode' => 'clean'
       }
     end
 
@@ -38,27 +67,28 @@ module Agents
         incoming_events = incoming_events.first(20)
       end
       incoming_events.each do |event|
-        result = interpolated(event)
-        tweet_text = result['message']
-        tweet_media = result['media_url']
-        begin
+        tweet_text = interpolated(event)['message']
+        tweet_media = interpolated(event)['media_url']
+        new_event = interpolated['output_mode'].to_s == 'merge' ? event.payload.dup : {}        begin
           tweet = publish_tweet tweet_text, tweet_media
-          create_event :payload => {
-            'success' => true,
-            'published_tweet' => tweet_text,
-            'tweet_id' => tweet.id,
-            'agent_id' => event.agent_id,
-            'event_id' => event.id
-          }
         rescue Twitter::Error => e
-          create_event :payload => {
+          new_event.update(
             'success' => false,
             'error' => e.message,
             'failed_tweet' => tweet_text,
             'agent_id' => event.agent_id,
             'event_id' => event.id
-          }
+          )
+        else
+          new_event.update(
+            'success' => true,
+            'published_tweet' => tweet_text,
+            'tweet_id' => tweet.id,
+            'agent_id' => event.agent_id,
+            'event_id' => event.id
+          )
         end
+        create_event payload: new_event
       end
     end
 
