@@ -69,7 +69,8 @@ module Agents
       incoming_events.each do |event|
         tweet_text = interpolated(event)['message']
         tweet_media = interpolated(event)['media_url']
-        new_event = interpolated['output_mode'].to_s == 'merge' ? event.payload.dup : {}        begin
+        new_event = interpolated['output_mode'].to_s == 'merge' ? event.payload.dup : {}
+        begin
           tweet = publish_tweet tweet_text, tweet_media
         rescue Twitter::Error => e
           new_event.update(
