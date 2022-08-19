@@ -13,6 +13,7 @@ module Agents
       To be able to use this Agent you need to authenticate with Twitter in the [Services](/services) section first.
 
       You must also specify a `message` parameter, you can use [Liquid](https://github.com/huginn/huginn/wiki/Formatting-Events-using-Liquid) to format the message.
+      Additional parameters can be passed via `parameters`.
 
       Set `expected_update_period_in_days` to the maximum amount of time that you'd expect to pass between Events being created by this Agent.
 
@@ -25,7 +26,7 @@ module Agents
           "success": true,
           "published_tweet": "...",
           "tweet_id": ...,
-          "tweet_id_str": "...",
+          "tweet_url": "...",
           "agent_id": ...,
           "event_id": ...
         }
@@ -57,6 +58,7 @@ module Agents
       {
         'expected_update_period_in_days' => "10",
         'message' => "{{text}}",
+        'parameters' => {},
         'output_mode' => 'clean'
       }
     end
@@ -67,11 +69,10 @@ module Agents
         incoming_events = incoming_events.first(20)
       end
       incoming_events.each do |event|
-        tweet_text = interpolated(event)['message']
-        tweet_media = interpolated(event)['media_url']
+        tweet_text, tweet_media, parameters = interpolated(event).values_at('message', 'media_url', 'parameters')
         new_event = interpolated['output_mode'].to_s == 'merge' ? event.payload.dup : {}
         begin
-          tweet = publish_tweet tweet_text, tweet_media
+          tweet = publish_tweet(tweet_text, tweet_media, parameters.presence || {})
         rescue Twitter::Error => e
           new_event.update(
             'success' => false,
@@ -85,6 +86,7 @@ module Agents
             'success' => true,
             'published_tweet' => tweet_text,
             'tweet_id' => tweet.id,
+            'tweet_url' => tweet.url,
             'agent_id' => event.agent_id,
             'event_id' => event.id
           )
@@ -93,9 +95,9 @@ module Agents
       end
     end
 
-    def publish_tweet(text, media)
+    def publish_tweet(text, media, parameters = {})
       return twitter.update_with_media(text, File.new(open(media))) unless media.blank?
-      twitter.update(text)
+      twitter.update(text, parameters)
     end
   end
 end

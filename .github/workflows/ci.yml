@@ -6,7 +6,7 @@ on:
 
 jobs:
   run-tests:
-    name: ${{ matrix.os }} ${{ matrix.ruby }} ${{ matrix.database_adapter }}
+    name: ${{ matrix.os }} ruby-${{ matrix.ruby }} ${{ matrix.database_adapter }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -17,7 +17,7 @@ jobs:
           - mysql2
           - postgresql
         ruby:
-          # - "2.7"
+          - "2.7"
           - "2.6"
     env:
       DATABASE_ADAPTER: ${{ matrix.database_adapter }}
@@ -53,10 +53,10 @@ jobs:
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
-        env:
-          BUNDLE_WITHOUT: "production"
         with:
           ruby-version: ${{ matrix.ruby }}
+          rubygems: latest
+          bundler: latest
           bundler-cache: true
 
       - name: Set up database

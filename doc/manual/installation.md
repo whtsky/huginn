@@ -72,20 +72,16 @@ Remove the old Ruby versions if present:
 Download Ruby and compile it:
 
     mkdir /tmp/ruby && cd /tmp/ruby
-    curl -L --progress-bar https://cache.ruby-lang.org/pub/ruby/2.6/ruby-2.6.5.tar.bz2 | tar xj
-    cd ruby-2.6.5
+    curl -L --progress-bar https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.6.tar.bz2 | tar xj
+    cd ruby-2.7.6
     ./configure --disable-install-rdoc
     make -j`nproc`
     sudo make install
 
-Install the bundler and foreman gems:
-
-    sudo gem install rake foreman --no-document
-    sudo gem install bundler -v '< 2' --no-document
-
-Update rubygems:
+Update rubygems and install foreman:
 
     sudo gem update --system --no-document
+    sudo gem install foreman --no-document
 
 ## 3. System Users
 
@@ -133,6 +129,7 @@ Grant the Huginn user necessary permissions on the database
     mysql> GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, LOCK TABLES ON `huginn_production`.* TO 'huginn'@'localhost';
 
 Use the flush privileges command to save the new permissions
+
     mysql> FLUSH PRIVILEGES;
 
 Quit the database session
