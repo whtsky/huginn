@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '>=2.6.0'
+ruby '>=2.7.0'
 
 # Ensure github repositories are fetched using HTTPS
 git_source(:github) do |repo_name|
@@ -200,11 +200,11 @@ ENV['DATABASE_ADAPTER'] ||=
   end
 
 if_true(ENV['DATABASE_ADAPTER'].strip == 'postgresql') do
-  gem 'pg', '~> 1.1.3'
+  gem 'pg', '~> 1.1'
 end
 
 if_true(ENV['DATABASE_ADAPTER'].strip == 'mysql2') do
-  gem 'mysql2' , "~> 0.5.2"
+  gem 'mysql2', "~> 0.5"
 end
 
 GemfileHelper.parse_each_agent_gem(ENV['ADDITIONAL_GEMS']) do |args|

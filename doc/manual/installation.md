@@ -46,7 +46,7 @@ up-to-date and install it.
 
 Install the required packages (needed to compile Ruby and native extensions to Ruby gems):
 
-    sudo apt-get install -y runit build-essential git zlib1g-dev libyaml-dev libssl-dev libgdbm-dev libreadline-dev libncurses5-dev libffi-dev curl openssh-server checkinstall libxml2-dev libxslt-dev libcurl4-openssl-dev libicu-dev logrotate python-docutils pkg-config cmake nodejs graphviz jq
+    sudo apt-get install -y runit build-essential git zlib1g-dev libyaml-dev libssl-dev libgdbm-dev libreadline-dev libncurses5-dev libffi-dev curl openssh-server checkinstall libxml2-dev libxslt-dev libcurl4-openssl-dev libicu-dev logrotate python-docutils pkg-config cmake nodejs graphviz jq shared-mime-info
 
 
 ### Debian Stretch
@@ -72,8 +72,8 @@ Remove the old Ruby versions if present:
 Download Ruby and compile it:
 
     mkdir /tmp/ruby && cd /tmp/ruby
-    curl -L --progress-bar https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.6.tar.bz2 | tar xj
-    cd ruby-2.7.6
+    curl -L --progress-bar https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.7.tar.bz2 | tar xj
+    cd ruby-2.7.7
     ./configure --disable-install-rdoc
     make -j`nproc`
     sudo make install
@@ -96,7 +96,9 @@ Install the database packages
     sudo apt-get install -y mysql-server mysql-client libmysqlclient-dev
 
 For Debian Stretch, replace `libmysqlclient-dev` with `default-libmysqlclient-dev`. See the [additional notes section](#additional-notes) for more information.
-
+For Debian BullEye:
+    sudo apt-get install -y default-mysql-server default-mysql-client default-libmysqlclient-dev
+    
 Check the installed MySQL version (remember if its >= 5.5.3 for the `.env` configuration done later):
 
     mysql --version
